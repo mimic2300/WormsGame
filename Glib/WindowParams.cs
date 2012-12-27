@@ -11,7 +11,7 @@ namespace Glib
     {
         #region Proměnné
 
-        private IntPtr _handle;
+        private IntPtr mHandle;
 
         /// <summary>
         /// Titulek okna.
@@ -55,7 +55,7 @@ namespace Glib
         /// <param name="form"></param>
         public WindowParams(RenderForm form)
         {
-            _handle = form.Handle;
+            mHandle = form.Handle;
 
             Title = form.Text;
             Width = form.Width;
@@ -69,7 +69,7 @@ namespace Glib
         /// </summary>
         public IntPtr Handle
         {
-            get { return _handle; }
+            get { return mHandle; }
         }
     }
 }

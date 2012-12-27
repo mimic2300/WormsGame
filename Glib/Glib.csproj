@@ -50,6 +50,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Draw2D.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="GameTimeInfo.cs" />
     <Compile Include="GameWindow.cs" />

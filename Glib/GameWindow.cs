@@ -12,16 +12,16 @@ namespace Glib
     {
         #region Proměnné
 
-        private GameTime _gameTime = null;
-        private RenderForm _form = null;
+        private GameTime mGameTime = null;
+        private RenderForm mRenderForm = null;
         // základní parametry herního okna, které lze měnit
-        private WindowParams _windowParams;
-        private double _deltaTime = 0;
-        private int _fps = 0;
+        private WindowParams mWindowParams;
+        private double mDeltaTime = 0;
+        private int mFps = 0;
         // pouze počítadlo pro FPS
-        private int _fpsCount = 0;
+        private int mFpsCount = 0;
         // pouze sčítač delta času
-        private double _fpsAccumulator = 0;
+        private double mFpsAccumulator = 0;
 
         #endregion Proměnné
 
@@ -32,24 +32,24 @@ namespace Glib
         /// </summary>
         public GameWindow()
         {
-            _gameTime = new GameTime();
+            mGameTime = new GameTime();
 
-            _form = new RenderForm();
-            _form.Icon = null;
-            _form.Text = "Game Window";
-            _form.FormBorderStyle = FormBorderStyle.FixedSingle;
-            _form.MaximizeBox = false;
-            _form.Size = new Size(720, 480);
-            _form.StartPosition = FormStartPosition.CenterScreen;
+            mRenderForm = new RenderForm();
+            mRenderForm.Icon = null;
+            mRenderForm.Text = "Game Window";
+            mRenderForm.FormBorderStyle = FormBorderStyle.Sizable;
+            mRenderForm.MaximizeBox = true;
+            mRenderForm.Size = new Size(800, 600);
+            mRenderForm.StartPosition = FormStartPosition.CenterScreen;
 
-            _form.KeyDown += new KeyEventHandler((o, e) => { KeyDown(e); });
-            _form.KeyUp += new KeyEventHandler((o, e) => { KeyUp(e); });
-            _form.MouseDown += new MouseEventHandler((o, e) => { MouseDown(e); });
-            _form.MouseUp += new MouseEventHandler((o, e) => { MouseUp(e); });
-            _form.MouseMove += new MouseEventHandler((o, e) => { MouseMove(e); });
-            _form.MouseWheel += new MouseEventHandler((o, e) => { MouseWheel(e); });
+            mRenderForm.KeyDown += new KeyEventHandler((o, e) => { KeyDown(e); });
+            mRenderForm.KeyUp += new KeyEventHandler((o, e) => { KeyUp(e); });
+            mRenderForm.MouseDown += new MouseEventHandler((o, e) => { MouseDown(e); });
+            mRenderForm.MouseUp += new MouseEventHandler((o, e) => { MouseUp(e); });
+            mRenderForm.MouseMove += new MouseEventHandler((o, e) => { MouseMove(e); });
+            mRenderForm.MouseWheel += new MouseEventHandler((o, e) => { MouseWheel(e); });
 
-            _windowParams = new WindowParams(_form);
+            mWindowParams = new WindowParams(mRenderForm);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Glib
         public GameWindow(string title)
             : this()
         {
-            _windowParams.Title = title;
+            mWindowParams.Title = title;
         }
 
         /// <summary>
@@ -71,8 +71,8 @@ namespace Glib
         public GameWindow(string title, int width, int height)
             : this(title)
         {
-            _windowParams.Width = width;
-            _windowParams.Height = height;
+            mWindowParams.Width = width;
+            mWindowParams.Height = height;
         }
 
         #endregion Konstruktory
@@ -84,7 +84,7 @@ namespace Glib
         /// </summary>
         public WindowParams WindowParams
         {
-            get { return _windowParams; }
+            get { return mWindowParams; }
         }
 
         /// <summary>
@@ -92,12 +92,20 @@ namespace Glib
         /// </summary>
         public string WindowTitle
         {
-            get { return _windowParams.Title; }
+            get { return mWindowParams.Title; }
             set
             {
-                _windowParams.Title = value;
-                _form.Text = value;
+                mWindowParams.Title = value;
+                mRenderForm.Text = value;
             }
+        }
+
+        /// <summary>
+        /// Handle herního okna.
+        /// </summary>
+        public IntPtr Handle
+        {
+            get { return mWindowParams.Handle; }
         }
 
         /// <summary>
@@ -105,7 +113,7 @@ namespace Glib
         /// </summary>
         public int Width
         {
-            get { return _windowParams.Width; }
+            get { return mWindowParams.Width; }
         }
 
         /// <summary>
@@ -113,7 +121,7 @@ namespace Glib
         /// </summary>
         public int Height
         {
-            get { return _windowParams.Height; }
+            get { return mWindowParams.Height; }
         }
 
         /// <summary>
@@ -121,7 +129,7 @@ namespace Glib
         /// </summary>
         public int FPS
         {
-            get { return _fps; }
+            get { return mFps; }
         }
 
         /// <summary>
@@ -129,7 +137,7 @@ namespace Glib
         /// </summary>
         public double DeltaTime
         {
-            get { return _deltaTime; }
+            get { return mDeltaTime; }
         }
 
         #endregion Vlastnosti
@@ -139,10 +147,10 @@ namespace Glib
         /// </summary>
         public void Dispose()
         {
-            if (_gameTime.IsRunning)
-                _gameTime.Stop();
+            if (mGameTime.IsRunning)
+                mGameTime.Stop();
 
-            _form.Dispose();
+            mRenderForm.Dispose();
             GC.SuppressFinalize(this);
         }
 
@@ -151,7 +159,7 @@ namespace Glib
         /// </summary>
         public void Exit()
         {
-            _form.Close();
+            mRenderForm.Close();
         }
 
         /// <summary>
@@ -159,13 +167,13 @@ namespace Glib
         /// </summary>
         protected void ApplyChanges()
         {
-            _form.Text = _windowParams.Title;
-            _form.Icon = _windowParams.Icon;
+            mRenderForm.Text = mWindowParams.Title;
+            mRenderForm.Icon = mWindowParams.Icon;
 
-            int width = Screen.PrimaryScreen.Bounds.Width - _windowParams.Width;
-            int height = Screen.PrimaryScreen.Bounds.Height - _windowParams.Height;
+            int width = Screen.PrimaryScreen.Bounds.Width - mWindowParams.Width;
+            int height = Screen.PrimaryScreen.Bounds.Height - mWindowParams.Height;
 
-            _form.Bounds = new Rectangle(width / 2, height / 2, _windowParams.Width, _windowParams.Height);
+            mRenderForm.Bounds = new Rectangle(width / 2, height / 2, mWindowParams.Width, mWindowParams.Height);
         }
 
         /// <summary>
@@ -173,38 +181,38 @@ namespace Glib
         /// </summary>
         public void Run()
         {
-            Initialize(ref _windowParams); // abstract
+            Initialize(ref mWindowParams); // abstract
 
             bool isResizing = false;
             bool isClosing = false;
 
-            _form.ResizeBegin += new EventHandler((o, e) => { isResizing = true; });
-            _form.ResizeEnd += new EventHandler((o, e) => { isResizing = false; });
-            _form.FormClosing += new FormClosingEventHandler((o, e) => { isClosing = true; });
+            mRenderForm.ResizeBegin += new EventHandler((o, e) => { isResizing = true; });
+            mRenderForm.ResizeEnd += new EventHandler((o, e) => { isResizing = false; });
+            mRenderForm.FormClosing += new FormClosingEventHandler((o, e) => { isClosing = true; });
 
             LoadContent(); // virtual
 
-            _gameTime.Start();
+            mGameTime.Start();
 
-            RenderLoop.Run(_form, () =>
+            RenderLoop.Run(mRenderForm, () =>
             {
                 if (isClosing)
                     return;
 
-                _deltaTime = _gameTime.UpdateDeltaTime();
+                mDeltaTime = mGameTime.UpdateDeltaTime();
 
-                GameTimeInfo gameTime = new GameTimeInfo(_gameTime.ElapsedTime, _deltaTime);
+                GameTimeInfo gameTime = new GameTimeInfo(mGameTime.ElapsedTime, mDeltaTime);
 
                 Update(gameTime); // virtual
 
-                _fpsAccumulator += _deltaTime;
-                ++_fpsCount;
+                mFpsAccumulator += mDeltaTime;
+                ++mFpsCount;
 
-                if (_fpsAccumulator >= 1.0)
+                if (mFpsAccumulator >= 1.0)
                 {
-                    _fps = (int)(_fpsCount / _fpsAccumulator);
-                    _fpsAccumulator = 0;
-                    _fpsCount = 0;
+                    mFps = (int)(mFpsCount / mFpsAccumulator);
+                    mFpsAccumulator = 0;
+                    mFpsCount = 0;
                 }
 
                 if (!isResizing)

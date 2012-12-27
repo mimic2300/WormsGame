@@ -12,16 +12,16 @@ namespace Glib
     /// </summary>
     public class GameWindow2D : GameWindow
     {
-        private Factory _factory = null;
-        private FactoryWrite _factoryWrite = null;
-        private WindowRenderTarget _renderTarget = null;
+        private Factory mFactory = null;
+        private FactoryWrite mFactoryWrite = null;
+        private WindowRenderTarget mRenderTarget = null;
 
         /// <summary>
         /// Grafický ovladač.
         /// </summary>
         protected WindowRenderTarget Device
         {
-            get { return _renderTarget; }
+            get { return mRenderTarget; }
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Glib
         /// </summary>
         protected FactoryWrite FactoryWrite
         {
-            get { return _factoryWrite; }
+            get { return mFactoryWrite; }
         }
 
         /// <summary>
@@ -39,19 +39,19 @@ namespace Glib
         /// <remarks>Je nutné poté zavolat funkci <c>ApplyChanges</c> a tím uložit změny.</remarks>
         protected override void Initialize(ref WindowParams window)
         {
-            _factory = new Factory();
-            _factoryWrite = new FactoryWrite();
+            mFactory = new Factory();
+            mFactoryWrite = new FactoryWrite();
 
             HwndRenderTargetProperties properties = new HwndRenderTargetProperties()
             {
-                Hwnd = WindowParams.Handle,
+                Hwnd = Handle,
                 PixelSize = new DrawingSize(Width, Height),
                 PresentOptions = WindowParams.VSync ? PresentOptions.None : PresentOptions.Immediately
             };
 
-            _renderTarget = new WindowRenderTarget(_factory,
+            mRenderTarget = new WindowRenderTarget(mFactory,
                 new RenderTargetProperties(new PixelFormat(Format.Unknown, AlphaMode.Premultiplied)), properties);
-            _renderTarget.AntialiasMode = AntialiasMode.PerPrimitive;
+            mRenderTarget.AntialiasMode = AntialiasMode.PerPrimitive;
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Glib
         protected override void DrawBegin()
         {
             base.DrawBegin();
-            _renderTarget.BeginDraw();
+            mRenderTarget.BeginDraw();
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Glib
         protected override void DrawEnd()
         {
             base.DrawEnd();
-            _renderTarget.EndDraw();
+            mRenderTarget.EndDraw();
         }
     }
 }

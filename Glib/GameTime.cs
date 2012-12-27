@@ -7,15 +7,15 @@ namespace Glib
     /// </summary>
     public sealed class GameTime
     {
-        private Stopwatch _stopwatch = null;
-        private double _lastUpdate = 0;
+        private Stopwatch mStopwatch = null;
+        private double mLastUpdate = 0;
 
         /// <summary>
         /// Hlavní konstruktor.
         /// </summary>
         public GameTime()
         {
-            _stopwatch = new Stopwatch();
+            mStopwatch = new Stopwatch();
         }
 
         /// <summary>
@@ -23,8 +23,8 @@ namespace Glib
         /// </summary>
         public void Start()
         {
-            _stopwatch.Start();
-            _lastUpdate = 0;
+            mStopwatch.Start();
+            mLastUpdate = 0;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Glib
         /// </summary>
         public void Stop()
         {
-            _stopwatch.Stop();
+            mStopwatch.Stop();
         }
 
         /// <summary>
@@ -42,8 +42,8 @@ namespace Glib
         public double UpdateDeltaTime()
         {
             double now = ElapsedTime;
-            double deltaTime = now - _lastUpdate;
-            _lastUpdate = now;
+            double deltaTime = now - mLastUpdate;
+            mLastUpdate = now;
             return deltaTime;
         }
 
@@ -52,7 +52,7 @@ namespace Glib
         /// </summary>
         public double ElapsedTime
         {
-            get { return _stopwatch.ElapsedMilliseconds * 0.001; }
+            get { return mStopwatch.ElapsedMilliseconds * 0.001; }
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Glib
         /// </summary>
         public bool IsRunning
         {
-            get { return _stopwatch.IsRunning; }
+            get { return mStopwatch.IsRunning; }
         }
     }
 }

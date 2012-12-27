@@ -10,15 +10,15 @@ namespace Glib
     /// </summary>
     public class GameWindowDx9 : GameWindow
     {
-        private Direct3D _direct = null;
-        private Device _device = null;
+        private Direct3D mDirect = null;
+        private Device mDevice = null;
 
         /// <summary>
         /// Grafický ovladač.
         /// </summary>
         protected Device Device
         {
-            get { return _device; }
+            get { return mDevice; }
         }
 
         /// <summary>
@@ -28,8 +28,8 @@ namespace Glib
         /// <remarks>Je nutné poté zavolat funkci <c>ApplyChanges</c> a tím uložit změny.</remarks>
         protected override void Initialize(ref WindowParams window)
         {
-            _direct = new Direct3D();
-            _device = new Device(_direct, 0, DeviceType.Hardware, WindowParams.Handle, CreateFlags.HardwareVertexProcessing,
+            mDirect = new Direct3D();
+            mDevice = new Device(mDirect, 0, DeviceType.Hardware, Handle, CreateFlags.HardwareVertexProcessing,
                 new PresentParameters(Width, Height));
         }
 
@@ -38,7 +38,7 @@ namespace Glib
         /// </summary>
         protected override void DrawBegin()
         {
-            _device.BeginScene();
+            mDevice.BeginScene();
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Glib
         /// <param name="time">Herní čas.</param>
         protected override void Draw(GameTimeInfo time)
         {
-            _device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+            mDevice.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
         }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace Glib
         /// </summary>
         protected override void DrawEnd()
         {
-            _device.EndScene();
-            _device.Present();
+            mDevice.EndScene();
+            mDevice.Present();
         }
     }
 }

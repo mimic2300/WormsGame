@@ -2,7 +2,7 @@
 
 namespace WormsGame
 {
-    static class Program
+    static class App
     {
         [STAThread]
         static void Main()
