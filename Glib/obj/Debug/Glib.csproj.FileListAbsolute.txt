@@ -1,0 +1,14 @@
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\bin\Debug\Glib.dll
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\bin\Debug\Glib.pdb
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\obj\Debug\Glib.dll
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\obj\Debug\Glib.pdb
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\bin\Debug\SharpDX.Direct2D1.dll
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\bin\Debug\SharpDX.Direct3D9.dll
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\bin\Debug\SharpDX.dll
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\bin\Debug\SharpDX.DXGI.dll
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\bin\Debug\SharpDX.xml
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\bin\Debug\SharpDX.Direct2D1.xml
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\bin\Debug\SharpDX.Direct3D9.xml
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\bin\Debug\SharpDX.DXGI.xml
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\obj\Debug\Glib.csprojResolveAssemblyReference.cache
+c:\users\mimic\documents\visual studio 2012\Projects\WormsGame\Glib\bin\Debug\Glib.XML

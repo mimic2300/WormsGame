@@ -1,0 +1,338 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Glib</name>
+    </assembly>
+    <members>
+        <member name="T:Glib.GameTime">
+            <summary>
+            Pracuje s herním časem.
+            </summary>
+        </member>
+        <member name="M:Glib.GameTime.#ctor">
+            <summary>
+            Hlavní konstruktor.
+            </summary>
+        </member>
+        <member name="M:Glib.GameTime.Start">
+            <summary>
+            Spustí stopky.
+            </summary>
+        </member>
+        <member name="M:Glib.GameTime.Stop">
+            <summary>
+            Zastaví stopky.
+            </summary>
+        </member>
+        <member name="M:Glib.GameTime.UpdateDeltaTime">
+            <summary>
+            Aktualizuje čas delta.
+            </summary>
+            <returns>Vrací čas delta.</returns>
+        </member>
+        <member name="P:Glib.GameTime.ElapsedTime">
+            <summary>
+            Uplynulý čas od startu stopek v sekundách.
+            </summary>
+        </member>
+        <member name="P:Glib.GameTime.IsRunning">
+            <summary>
+            Jsou stopky spuštěny?
+            </summary>
+        </member>
+        <member name="T:Glib.GameTimeInfo">
+            <summary>
+            Informace o herním času.
+            </summary>
+        </member>
+        <member name="F:Glib.GameTimeInfo.ElapsedTime">
+            <summary>
+            Uplynulý čas od spuštění herního okna.
+            </summary>
+        </member>
+        <member name="F:Glib.GameTimeInfo.DeltaTime">
+            <summary>
+            Delta čas.
+            </summary>
+        </member>
+        <member name="M:Glib.GameTimeInfo.#ctor(System.Double,System.Double)">
+            <summary>
+            Hlavní konstruktor.
+            </summary>
+            <param name="elapsedTime">Uplynulý čas od spuštění herního okna.</param>
+            <param name="deltaTime">Delta čas.</param>
+        </member>
+        <member name="T:Glib.GameWindow">
+            <summary>
+            Základní objekt herního okna.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow.#ctor">
+            <summary>
+            Hlavní konstruktor.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow.#ctor(System.String)">
+            <summary>
+            Konstruktor pro nastavení titulku herního okna.
+            </summary>
+            <param name="title">Titulek okna.</param>
+        </member>
+        <member name="M:Glib.GameWindow.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Konstruktor pro nastavení titulku a velikosti herního okna.
+            </summary>
+            <param name="title">Titulek okna.</param>
+            <param name="width">Šířka okna.</param>
+            <param name="height">Výška okna.</param>
+        </member>
+        <member name="M:Glib.GameWindow.Dispose">
+            <summary>
+            Uvolní prostředky herního okna.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow.Exit">
+            <summary>
+            Ukončí herní okno.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow.ApplyChanges">
+            <summary>
+            Aplikuje změny, které se provedly v parametrech okna při initializaci.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow.Run">
+            <summary>
+            Spustí a zobrazí herní okno.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow.Initialize(Glib.WindowParams@)">
+            <summary>
+            Provede initializaci před spuštěním herního okna.
+            </summary>
+            <param name="window">Parametry herního okna, které se již aplikovali.</param>
+            <remarks>Je nutné poté zavolat funkci <c>ApplyChanges</c> a tím uložit změny.</remarks>
+        </member>
+        <member name="M:Glib.GameWindow.Draw(Glib.GameTimeInfo)">
+            <summary>
+            Vykresluje vše na okno.
+            </summary>
+            <param name="time">Herní čas.</param>
+        </member>
+        <member name="M:Glib.GameWindow.DrawBegin">
+            <summary>
+            Počátek vykreslení.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow.DrawEnd">
+            <summary>
+            Konec vykreslení.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow.Update(Glib.GameTimeInfo)">
+            <summary>
+            Aktualizuje objekty před jejich vykreslením.
+            </summary>
+            <param name="time">Herní čas.</param>
+        </member>
+        <member name="M:Glib.GameWindow.LoadContent">
+            <summary>
+            Načte potřebný obsah před spuštěním herního okna.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow.UnloadContent">
+            <summary>
+            Uvolní načtený obsah při zavření okna.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow.Exiting">
+            <summary>
+            Herní okno je připraveno uvolnit prostředky a vypnout se.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow.KeyDown(System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Zachytí stisk klávesy.
+            </summary>
+            <param name="e">Informace o stisku klávesy.</param>
+        </member>
+        <member name="M:Glib.GameWindow.KeyUp(System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Zachytí uvolnění klávesy.
+            </summary>
+            <param name="e">Informace o uvolněné klávese.</param>
+        </member>
+        <member name="M:Glib.GameWindow.MouseDown(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Zachytí stisknutí tlačítka myši.
+            </summary>
+            <param name="e">Informace o stisknutém tlačítku.</param>
+        </member>
+        <member name="M:Glib.GameWindow.MouseUp(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Zachytí uvolnění tlačítka myši.
+            </summary>
+            <param name="e">Informace o uvolněném tlačítku.</param>
+        </member>
+        <member name="M:Glib.GameWindow.MouseMove(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Zachytí pohyb myši po herním okně.
+            </summary>
+            <param name="e">Informace o pohybu myši.</param>
+        </member>
+        <member name="M:Glib.GameWindow.MouseWheel(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Zachytí změnu hodnoty na kolečku myši.
+            </summary>
+            <param name="e">Informace o kolečku myši.</param>
+        </member>
+        <member name="P:Glib.GameWindow.WindowParams">
+            <summary>
+            Parametry herního okna.
+            </summary>
+        </member>
+        <member name="P:Glib.GameWindow.WindowTitle">
+            <summary>
+            Získá nebo nastaví titulek okna.
+            </summary>
+        </member>
+        <member name="P:Glib.GameWindow.Width">
+            <summary>
+            Šířka herního okna.
+            </summary>
+        </member>
+        <member name="P:Glib.GameWindow.Height">
+            <summary>
+            Výška herního okna.
+            </summary>
+        </member>
+        <member name="P:Glib.GameWindow.FPS">
+            <summary>
+            FPS.
+            </summary>
+        </member>
+        <member name="P:Glib.GameWindow.DeltaTime">
+            <summary>
+            Čas delta.
+            </summary>
+        </member>
+        <member name="T:Glib.GameWindow2D">
+            <summary>
+            Herní okno pro 2D grafiku (Direct2D1).
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow2D.Initialize(Glib.WindowParams@)">
+            <summary>
+            Provede initializaci před spuštěním herního okna.
+            </summary>
+            <param name="window">Parametry herního okna, které se již aplikovali.</param>
+            <remarks>Je nutné poté zavolat funkci <c>ApplyChanges</c> a tím uložit změny.</remarks>
+        </member>
+        <member name="M:Glib.GameWindow2D.Draw(Glib.GameTimeInfo)">
+            <summary>
+            Vykresluje vše na okno.
+            </summary>
+            <param name="time">Herní čas.</param>
+        </member>
+        <member name="M:Glib.GameWindow2D.DrawBegin">
+            <summary>
+            Počátek vykreslení.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindow2D.DrawEnd">
+            <summary>
+            Konec vykreslení.
+            </summary>
+        </member>
+        <member name="P:Glib.GameWindow2D.Device">
+            <summary>
+            Grafický ovladač.
+            </summary>
+        </member>
+        <member name="P:Glib.GameWindow2D.FactoryWrite">
+            <summary>
+            Správce výroby objektů.
+            </summary>
+        </member>
+        <member name="T:Glib.GameWindowDx9">
+            <summary>
+            Herní okno přes DirectX 9.0c.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindowDx9.Initialize(Glib.WindowParams@)">
+            <summary>
+            Provede initializaci před spuštěním herního okna.
+            </summary>
+            <param name="window">Parametry herního okna, které se již aplikovali.</param>
+            <remarks>Je nutné poté zavolat funkci <c>ApplyChanges</c> a tím uložit změny.</remarks>
+        </member>
+        <member name="M:Glib.GameWindowDx9.DrawBegin">
+            <summary>
+            Počátek vykreslení.
+            </summary>
+        </member>
+        <member name="M:Glib.GameWindowDx9.Draw(Glib.GameTimeInfo)">
+            <summary>
+            Vykresluje vše na okno.
+            </summary>
+            <param name="time">Herní čas.</param>
+        </member>
+        <member name="M:Glib.GameWindowDx9.DrawEnd">
+            <summary>
+            Konec vykreslení.
+            </summary>
+        </member>
+        <member name="P:Glib.GameWindowDx9.Device">
+            <summary>
+            Grafický ovladač.
+            </summary>
+        </member>
+        <member name="T:Glib.WindowParams">
+            <summary>
+            Parametry herního okna.
+            </summary>
+        </member>
+        <member name="F:Glib.WindowParams.Title">
+            <summary>
+            Titulek okna.
+            </summary>
+        </member>
+        <member name="F:Glib.WindowParams.Width">
+            <summary>
+            Šířka okna.
+            </summary>
+        </member>
+        <member name="F:Glib.WindowParams.Height">
+            <summary>
+            Výška okna.
+            </summary>
+        </member>
+        <member name="F:Glib.WindowParams.Icon">
+            <summary>
+            Ikonka okna.
+            </summary>
+        </member>
+        <member name="F:Glib.WindowParams.VSync">
+            <summary>
+            Má se použít vertikální synchronizace?
+            </summary>
+        </member>
+        <member name="M:Glib.WindowParams.#ctor(Glib.WindowParams)">
+            <summary>
+            Kopírovací konstruktor.
+            </summary>
+            <param name="window">Parametry herního okna.</param>
+        </member>
+        <member name="M:Glib.WindowParams.#ctor(SharpDX.Windows.RenderForm)">
+            <summary>
+            Konstruktor, který získá parametry z herního okna.
+            </summary>
+            <param name="form"></param>
+        </member>
+        <member name="P:Glib.WindowParams.Handle">
+            <summary>
+            Získá handle okna.
+            </summary>
+        </member>
+    </members>
+</doc>
