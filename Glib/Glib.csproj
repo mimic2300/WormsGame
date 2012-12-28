@@ -66,6 +66,7 @@
     <Compile Include="Input\InputBase.cs" />
     <Compile Include="Input\Keyboard.cs" />
     <Compile Include="Input\Mouse.cs" />
+    <Compile Include="Input\MouseButtonsEnum.cs" />
     <Compile Include="Native\Win32Constants.cs" />
     <Compile Include="Native\Win32Methods.cs" />
     <Compile Include="Native\Win32Structs.cs" />

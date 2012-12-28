@@ -2,7 +2,6 @@
 using SharpDX.Toolkit;
 using System;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace Glib.Input
 {
@@ -11,7 +10,9 @@ namespace Glib.Input
     /// </summary>
     public class Mouse
     {
-        const int ButtonCount = 6;
+        #region Proměnné
+
+        const int ButtonCount = 5;
 
         GlibWindow window;
 
@@ -21,9 +22,13 @@ namespace Glib.Input
         bool[] buttons;
         bool[] oldButtons;
 
-        MouseButtons? lastClickedButton;
+        MouseButtonsEnum? lastClickedButton;
         TimeSpan elapsedSinceClick;
-        MouseButtons? doubleClickedButton;
+        MouseButtonsEnum? doubleClickedButton;
+
+        #endregion
+
+        #region Vlastnosti
 
         /// <summary>
         /// Returns true if the mouse is within the game window client area.
@@ -48,7 +53,7 @@ namespace Glib.Input
         /// </summary>
         public Point Position
         {
-            get { return this.position; }
+            get { return position; }
         }
 
         /// <summary>
@@ -56,7 +61,7 @@ namespace Glib.Input
         /// </summary>
         public Point PositionDelta
         {
-            get { return new Point(this.position.X - this.oldPosition.X, this.position.Y - this.oldPosition.Y); }
+            get { return new Point(position.X - oldPosition.X, position.Y - oldPosition.Y); }
         }
 
         /// <summary>
@@ -64,7 +69,7 @@ namespace Glib.Input
         /// </summary>
         public int X
         {
-            get { return this.position.X; }
+            get { return position.X; }
         }
 
         /// <summary>
@@ -72,7 +77,7 @@ namespace Glib.Input
         /// </summary>
         public int Y
         {
-            get { return this.position.Y; }
+            get { return position.Y; }
         }
 
         /// <summary>
@@ -80,7 +85,7 @@ namespace Glib.Input
         /// </summary>
         public bool LeftButton
         {
-            get { return this.buttons[(int)MouseButtons.Left]; }
+            get { return buttons[(int)MouseButtonsEnum.Left]; }
         }
 
         /// <summary>
@@ -88,7 +93,7 @@ namespace Glib.Input
         /// </summary>
         public bool RightButton
         {
-            get { return this.buttons[(int)MouseButtons.Right]; }
+            get { return buttons[(int)MouseButtonsEnum.Right]; }
         }
 
         /// <summary>
@@ -96,7 +101,7 @@ namespace Glib.Input
         /// </summary>
         public bool MiddleButton
         {
-            get { return this.buttons[(int)MouseButtons.Middle]; }
+            get { return buttons[(int)MouseButtonsEnum.Middle]; }
         }
 
         /// <summary>
@@ -104,7 +109,7 @@ namespace Glib.Input
         /// </summary>
         public bool XButton1
         {
-            get { return this.buttons[(int)MouseButtons.XButton1]; }
+            get { return buttons[(int)MouseButtonsEnum.XButton1]; }
         }
 
         /// <summary>
@@ -112,8 +117,12 @@ namespace Glib.Input
         /// </summary>
         public bool XButton2
         {
-            get { return this.buttons[(int)MouseButtons.XButton2]; }
+            get { return buttons[(int)MouseButtonsEnum.XButton2]; }
         }
+
+        #endregion
+
+        #region Konstruktory
 
         /// <summary>
         /// Constructor.
@@ -122,109 +131,103 @@ namespace Glib.Input
         public Mouse(GlibWindow window)
         {
             if (window == null)
-                throw new ArgumentNullException("window", "Window was null. Please provide an instance of IGameWindow.");
+                throw new ArgumentNullException("window", "Window was null. Please provide an instance of GlibWindow.");
 
             this.window = window;
 
-            this.DoubleClickRate = TimeSpan.FromMilliseconds(Win32Methods.GetDoubleClickTime());
+            DoubleClickRate = TimeSpan.FromMilliseconds(Win32Methods.GetDoubleClickTime());
 
-            this.position = new Point(0, 0);
-            this.oldPosition = new Point(0, 0);
+            position = new Point(0, 0);
+            oldPosition = new Point(0, 0);
 
-            this.buttons = new bool[ButtonCount];
-            this.oldButtons = new bool[ButtonCount];
+            buttons = new bool[ButtonCount];
+            oldButtons = new bool[ButtonCount];
 
             window.OnUpdate += Update;
         }
+
+        #endregion
+
+        #region Metody
 
         /// <summary>
         /// Updates the state of the mouse.
         /// </summary>
         public void Update(GameTime gameTime)
         {
+            IntPtr windowHandle = ((System.Windows.Forms.Form)window.Window.NativeWindow).Handle;
+
             Win32Point point;
             Win32Methods.GetCursorPos(out point);
-            Win32Methods.ScreenToClient(((Form)window.Window.NativeWindow).Handle, ref point);
+            Win32Methods.ScreenToClient(windowHandle, ref point);
 
-            if (point.X < 0 ||
-                point.Y < 0 ||
-                point.X >= window.Window.ClientBounds.Width ||
-                point.Y >= window.Window.ClientBounds.Height)
+            UpdateIsWithinDisplayArea(point);
+
+            oldPosition = position;
+            position = new Point(point.X, point.Y);
+
+            Array.Copy(buttons, oldButtons, ButtonCount);
+
+            buttons[(int)MouseButtonsEnum.Left] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_LBUTTON) != 0);
+            buttons[(int)MouseButtonsEnum.Right] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_RBUTTON) != 0);
+            buttons[(int)MouseButtonsEnum.Middle] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_MBUTTON) != 0);
+            buttons[(int)MouseButtonsEnum.XButton1] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_XBUTTON1) != 0);
+            buttons[(int)MouseButtonsEnum.XButton2] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_XBUTTON2) != 0);
+
+            DoubleClickDetection(gameTime);
+        }
+
+        private void DoubleClickDetection(GameTime gameTime)
+        {
+            doubleClickedButton = null;
+
+            if (lastClickedButton != null)
             {
-                this.IsWithinDisplayArea = false;
+                elapsedSinceClick += gameTime.ElapsedGameTime;
+
+                if (elapsedSinceClick > DoubleClickRate ||
+                    elapsedSinceClick > TimeSpan.FromSeconds(5))
+                {
+                    lastClickedButton = null;
+                }
             }
-            else
+
+            MouseButtonsEnum? clickedButton = null;
+
+            for (int i = 0; i < ButtonCount; i++)
             {
-                this.IsWithinDisplayArea = true;
+                if (IsButtonPressed((MouseButtonsEnum)i))
+                {
+                    clickedButton = (MouseButtonsEnum)i;
+                }
             }
 
-            this.oldPosition = this.position;
-            this.position = new Point(point.X, point.Y);
+            if (clickedButton != null)
+            {
+                if (clickedButton.Value == lastClickedButton)
+                {
+                    if (elapsedSinceClick <= DoubleClickRate)
+                    {
+                        doubleClickedButton = clickedButton;
+                        lastClickedButton = null;
+                        elapsedSinceClick = TimeSpan.Zero;
+                    }
+                }
+                else
+                {
+                    lastClickedButton = clickedButton;
+                    elapsedSinceClick = TimeSpan.Zero;
+                }
+            }
+        }
 
-            //for (int i = 0; i < ButtonCount; i++)
-            //    this.oldButtons[i] = this.buttons[i];
-
-            //this.buttons[(int)MouseButtons.Left] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_LBUTTON) != 0);
-            //this.buttons[(int)MouseButtons.Right] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_RBUTTON) != 0);
-            //this.buttons[(int)MouseButtons.Middle] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_MBUTTON) != 0);
-            //this.buttons[(int)MouseButtons.XButton1] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_XBUTTON1) != 0);
-            //this.buttons[(int)MouseButtons.XButton2] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_XBUTTON2) != 0);
-
-            // Double click detection.
-
-            //this.doubleClickedButton = null;
-
-            //if (this.lastClickedButton != null)
-            //{
-            //    this.elapsedSinceClick += gameTime.ElapsedGameTime;
-
-            //    if (this.elapsedSinceClick > this.DoubleClickRate ||
-            //        this.elapsedSinceClick > TimeSpan.FromSeconds(5)) // Give up updating after 5 seconds
-            //    {
-            //        this.lastClickedButton = null;
-            //    }
-            //}
-
-            //MouseButtons? clickedButton = null;
-
-            //if (this.IsButtonClicked(MouseButtons.Left))
-            //{
-            //    clickedButton = MouseButtons.Left;
-            //}
-            //else if (this.IsButtonClicked(MouseButtons.Right))
-            //{
-            //    clickedButton = MouseButtons.Right;
-            //}
-            //else if (this.IsButtonClicked(MouseButtons.Middle))
-            //{
-            //    clickedButton = MouseButtons.Middle;
-            //}
-            //else if (this.IsButtonClicked(MouseButtons.XButton1))
-            //{
-            //    clickedButton = MouseButtons.XButton1;
-            //}
-            //else if (this.IsButtonClicked(MouseButtons.XButton2))
-            //{
-            //    clickedButton = MouseButtons.XButton2;
-            //}
-
-            //if (clickedButton != null)
-            //{
-            //    if (clickedButton.Value == this.lastClickedButton)
-            //    {
-            //        if (this.elapsedSinceClick <= this.DoubleClickRate)
-            //        {
-            //            this.doubleClickedButton = clickedButton;
-            //            this.lastClickedButton = null;
-            //            this.elapsedSinceClick = TimeSpan.Zero;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        this.lastClickedButton = clickedButton;
-            //        this.elapsedSinceClick = TimeSpan.Zero;
-            //    }
-            //}
+        /// <summary>
+        /// Aktualizuje, jestli je kursor vne nebo vevnitr okna.
+        /// </summary>
+        /// <param name="point"></param>
+        private void UpdateIsWithinDisplayArea(Win32Point point)
+        {
+            IsWithinDisplayArea = point.X >= 0 && point.Y >= 0 && point.X <= window.Window.ClientBounds.Width && point.Y <= window.Window.ClientBounds.Height;
         }
 
         /// <summary>
@@ -232,9 +235,9 @@ namespace Glib.Input
         /// </summary>
         /// <param name="button"></param>
         /// <returns></returns>
-        public bool IsButtonDown(MouseButtons button)
+        public bool IsButtonDown(MouseButtonsEnum button)
         {
-            return this.buttons[(int)button];
+            return buttons[(int)button];
         }
 
         /// <summary>
@@ -242,19 +245,9 @@ namespace Glib.Input
         /// </summary>
         /// <param name="button"></param>
         /// <returns></returns>
-        public bool IsButtonPressed(MouseButtons button)
+        public bool IsButtonPressed(MouseButtonsEnum button)
         {
-            return this.buttons[(int)button] && !this.oldButtons[(int)button];
-        }
-
-        /// <summary>
-        /// Returns true if the given mouse button is currently down and was not on the last update. Method is same as IsButtonPressed().
-        /// </summary>
-        /// <param name="button"></param>
-        /// <returns></returns>
-        public bool IsButtonClicked(MouseButtons button)
-        {
-            return this.IsButtonPressed(button);
+            return buttons[(int)button] && !oldButtons[(int)button];
         }
 
         /// <summary>
@@ -262,9 +255,9 @@ namespace Glib.Input
         /// </summary>
         /// <param name="button"></param>
         /// <returns></returns>
-        public bool IsButtonDoubleClicked(MouseButtons button)
+        public bool IsButtonDoubleClicked(MouseButtonsEnum button)
         {
-            return this.doubleClickedButton != null && this.doubleClickedButton.Value == button;
+            return doubleClickedButton != null && doubleClickedButton.Value == button;
         }
 
         /// <summary>
@@ -272,9 +265,9 @@ namespace Glib.Input
         /// </summary>
         public void ResetDoubleClick()
         {
-            this.doubleClickedButton = null;
-            this.lastClickedButton = null;
-            this.elapsedSinceClick = TimeSpan.Zero;
+            doubleClickedButton = null;
+            lastClickedButton = null;
+            elapsedSinceClick = TimeSpan.Zero;
         }
 
         /// <summary>
@@ -282,9 +275,9 @@ namespace Glib.Input
         /// </summary>
         /// <param name="button"></param>
         /// <returns></returns>
-        public bool IsButtonUp(MouseButtons button)
+        public bool IsButtonUp(MouseButtonsEnum button)
         {
-            return !this.buttons[(int)button];
+            return !buttons[(int)button];
         }
 
         /// <summary>
@@ -292,15 +285,30 @@ namespace Glib.Input
         /// </summary>
         /// <param name="button"></param>
         /// <returns></returns>
-        public bool IsButtonReleased(MouseButtons button)
+        public bool IsButtonReleased(MouseButtonsEnum button)
         {
-            return !this.buttons[(int)button] && this.oldButtons[(int)button];
+            return !buttons[(int)button] && oldButtons[(int)button];
         }
 
-
+        /// <summary>
+        /// Prekryje metodu ToString.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            return String.Format("[{0}, {1}] IsIn: {2}", position.X, position.Y, IsWithinDisplayArea);
+            string downButtons = "";
+
+            for (int i = 0; i < ButtonCount; i++)
+            {
+                if (IsButtonDown((MouseButtonsEnum)i))
+                {
+                    downButtons += " " + ((MouseButtonsEnum)i).ToString();
+                }
+            }
+
+            return String.Format("[{0}, {1}]\nIsIn: {2} DownButtons:{3}", position.X, position.Y, IsWithinDisplayArea, downButtons);
         }
+
+        #endregion
     }
 }
