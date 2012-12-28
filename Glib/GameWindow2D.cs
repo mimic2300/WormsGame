@@ -79,6 +79,10 @@ namespace Glib
             mRenderTarget.EndDraw();
         }
 
+        /// <summary>
+        /// Změna velikosti herního okna.
+        /// </summary>
+        /// <param name="size">Nová velikost okna.</param>
         protected override void ResizeEnd(DrawingSize size)
         {
             base.ResizeEnd(size);

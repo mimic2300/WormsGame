@@ -11,6 +11,7 @@ namespace WormsGame
         private System.Windows.Forms.Keys mKeysDown;
         private int mMouseWheel = 0;
         private TextFormat mFont = null;
+        private TextLayout mLayout = null;
         private float mAngle = 0;
 
         protected override void WindowConfiguration(ref WindowConfig window)
@@ -25,7 +26,8 @@ namespace WormsGame
         {
             base.Initialize();
 
-            mFont = new TextFormat(FactoryWrite, "Consolas", 20f);
+            mFont = new TextFormat(FactoryWrite, "Verdana", 20f);
+            mLayout = new TextLayout(FactoryWrite, "mimic", mFont, 300, 30);
 
             Device.TextAntialiasMode = TextAntialiasMode.Aliased;
 
@@ -46,10 +48,13 @@ namespace WormsGame
         {
             base.Draw(time);
 
+            Draw2D.SolidBrush.Color = Color.Red;
+            Device.DrawTextLayout(new DrawingPointF(600, 200), mLayout, Draw2D.SolidBrush);
+
             Draw2D.Line(mMousePosition.X, 0, mMousePosition.X, Height, Color.Gray);
             Draw2D.Line(0, mMousePosition.Y, Width, mMousePosition.Y, Color.Gray);
 
-            System.Console.WriteLine("Width: " + Width + ", Height: " + Height);
+            //System.Console.WriteLine("Width: " + Width + ", Height: " + Height);
 
             Draw2D.Text("FPS: ", mFont, 10, 10, Color.White);
             Draw2D.Text("Delta time: ", mFont, 10, 30, Color.White);
