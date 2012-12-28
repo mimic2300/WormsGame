@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{10B9DD78-6B80-4E3F-B4CB-6E8AFAE4F661}</ProjectGuid>
+    <ProjectGuid>{77A1335C-91D4-4BF5-B88E-27BC808627B6}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WormsGame</RootNamespace>
@@ -32,30 +32,41 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="SharpDX">
       <HintPath>..\packages\SharpDX.2.4.2\lib\net40\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Direct2D1">
-      <HintPath>..\packages\SharpDX.Direct2D1.2.4.2\lib\net40\SharpDX.Direct2D1.dll</HintPath>
+    <Reference Include="SharpDX.D3DCompiler">
+      <HintPath>..\packages\SharpDX.D3DCompiler.2.4.2\lib\net40\SharpDX.D3DCompiler.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.DirectInput, Version=2.4.2.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SharpDX.DirectInput.2.4.2\lib\net40\SharpDX.DirectInput.dll</HintPath>
+    <Reference Include="SharpDX.Direct3D11">
+      <HintPath>..\packages\SharpDX.Direct3D11.2.4.2\lib\net40\SharpDX.Direct3D11.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI">
       <HintPath>..\packages\SharpDX.DXGI.2.4.2\lib\net40\SharpDX.DXGI.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX.Toolkit">
+      <HintPath>..\packages\SharpDX.Toolkit.2.4.2\lib\net40\SharpDX.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Toolkit.Game">
+      <HintPath>..\packages\SharpDX.Toolkit.Game.2.4.2\lib\net40\SharpDX.Toolkit.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Toolkit.Graphics">
+      <HintPath>..\packages\SharpDX.Toolkit.Graphics.2.4.2\lib\net40\SharpDX.Toolkit.Graphics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WormsGameWindow.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -68,6 +79,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Content\consolas.ft">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -84,7 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Glib\Glib.csproj">
-      <Project>{bb8c6228-cf79-45b6-b0b0-531d154c8db7}</Project>
+      <Project>{cf301771-9e41-479b-9d26-1d8feb9346f7}</Project>
       <Name>Glib</Name>
     </ProjectReference>
   </ItemGroup>
