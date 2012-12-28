@@ -1,5 +1,6 @@
 ﻿using SharpDX.DirectInput;
 using SharpDX.Toolkit;
+
 using KeyboardDirect = SharpDX.DirectInput.Keyboard;
 
 namespace Glib.Input

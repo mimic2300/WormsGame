@@ -12,44 +12,36 @@ namespace Glib.Input
     {
         #region Proměnné
 
-        const int ButtonCount = 5;
+        /// <summary>
+        /// Počet tlačítek na myši.
+        /// </summary>
+        public const int BUTTON_COUNT = 5;
 
-        GlibWindow window;
-
-        Point position;
-        Point oldPosition;
-
-        bool[] buttons;
-        bool[] oldButtons;
-
-        MouseButtonsEnum? lastClickedButton;
-        TimeSpan elapsedSinceClick;
-        MouseButtonsEnum? doubleClickedButton;
+        private GlibWindow window;
+        private Point position;
+        private Point oldPosition;
+        private bool[] buttons;
+        private bool[] oldButtons;
+        private MouseButtonsType? lastClickedButton;
+        private MouseButtonsType? doubleClickedButton;
+        private TimeSpan elapsedSinceClick;
 
         #endregion
 
         #region Vlastnosti
 
         /// <summary>
-        /// Returns true if the mouse is within the game window client area.
+        /// Pokud se myš nachází v okně.
         /// </summary>
-        public bool IsWithinDisplayArea
-        {
-            get;
-            private set;
-        }
+        public bool IsWithinDisplayArea { get; private set; }
 
         /// <summary>
-        /// Returns the double click rate for the mouse.
+        /// Rychlost dvoj-kliku.
         /// </summary>
-        public TimeSpan DoubleClickRate
-        {
-            get;
-            private set;
-        }
+        public TimeSpan DoubleClickRate { get; private set; }
 
         /// <summary>
-        /// The position of the cursor.
+        /// Pozice myši.
         /// </summary>
         public Point Position
         {
@@ -57,7 +49,7 @@ namespace Glib.Input
         }
 
         /// <summary>
-        /// The delta of the position from the last update.
+        /// Delta pozice od poslední aktualizace.
         /// </summary>
         public Point PositionDelta
         {
@@ -65,7 +57,7 @@ namespace Glib.Input
         }
 
         /// <summary>
-        /// The X position of the cursor.
+        /// Pozice X.
         /// </summary>
         public int X
         {
@@ -73,7 +65,7 @@ namespace Glib.Input
         }
 
         /// <summary>
-        /// The Y position of the cursor.
+        /// Pozice Y.
         /// </summary>
         public int Y
         {
@@ -81,43 +73,43 @@ namespace Glib.Input
         }
 
         /// <summary>
-        /// Returns true if the left mouse button is currently down.
+        /// Levé tlačítko je stisknuto.
         /// </summary>
         public bool LeftButton
         {
-            get { return buttons[(int)MouseButtonsEnum.Left]; }
+            get { return buttons[(int)MouseButtonsType.Left]; }
         }
 
         /// <summary>
-        /// Returns true if the right mouse button is currently down.
+        /// Pravé tlačítko je stisknuto.
         /// </summary>
         public bool RightButton
         {
-            get { return buttons[(int)MouseButtonsEnum.Right]; }
+            get { return buttons[(int)MouseButtonsType.Right]; }
         }
 
         /// <summary>
-        /// Returns true if the middle mouse button is currently down.
+        /// Prostřední tlačítko je stisknuto.
         /// </summary>
         public bool MiddleButton
         {
-            get { return buttons[(int)MouseButtonsEnum.Middle]; }
+            get { return buttons[(int)MouseButtonsType.Middle]; }
         }
 
         /// <summary>
-        /// Returns true if XButton1 mouse button is currently down.
+        /// X1 tlačítko je stisknuto.
         /// </summary>
         public bool XButton1
         {
-            get { return buttons[(int)MouseButtonsEnum.XButton1]; }
+            get { return buttons[(int)MouseButtonsType.XButton1]; }
         }
 
         /// <summary>
-        /// Returns true if XButton2 mouse button is currently down.
+        /// X2 tlačítko je stisknuto.
         /// </summary>
         public bool XButton2
         {
-            get { return buttons[(int)MouseButtonsEnum.XButton2]; }
+            get { return buttons[(int)MouseButtonsType.XButton2]; }
         }
 
         #endregion
@@ -125,7 +117,7 @@ namespace Glib.Input
         #region Konstruktory
 
         /// <summary>
-        /// Constructor.
+        /// Konstruktor.
         /// </summary>
         /// <param name="window"></param>
         public Mouse(GlibWindow window)
@@ -137,27 +129,27 @@ namespace Glib.Input
 
             DoubleClickRate = TimeSpan.FromMilliseconds(Win32Methods.GetDoubleClickTime());
 
-            position = new Point(0, 0);
-            oldPosition = new Point(0, 0);
+            position = Point.Empty;
+            oldPosition = Point.Empty;
 
-            buttons = new bool[ButtonCount];
-            oldButtons = new bool[ButtonCount];
+            buttons = new bool[BUTTON_COUNT];
+            oldButtons = new bool[BUTTON_COUNT];
 
             window.OnUpdate += Update;
         }
 
         #endregion
 
-        #region Metody
+        #region Funkce
 
         /// <summary>
-        /// Updates the state of the mouse.
+        /// Aktualizuje stav myši.
         /// </summary>
-        public void Update(GameTime gameTime)
+        /// <param name="time">Herní čas.</param>
+        public void Update(GameTime time)
         {
-            IntPtr windowHandle = ((System.Windows.Forms.Form)window.Window.NativeWindow).Handle;
-
-            Win32Point point;
+            IntPtr windowHandle = window.Form.Handle;
+            POINT point;
             Win32Methods.GetCursorPos(out point);
             Win32Methods.ScreenToClient(windowHandle, ref point);
 
@@ -166,24 +158,28 @@ namespace Glib.Input
             oldPosition = position;
             position = new Point(point.X, point.Y);
 
-            Array.Copy(buttons, oldButtons, ButtonCount);
+            Array.Copy(buttons, oldButtons, BUTTON_COUNT);
 
-            buttons[(int)MouseButtonsEnum.Left] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_LBUTTON) != 0);
-            buttons[(int)MouseButtonsEnum.Right] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_RBUTTON) != 0);
-            buttons[(int)MouseButtonsEnum.Middle] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_MBUTTON) != 0);
-            buttons[(int)MouseButtonsEnum.XButton1] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_XBUTTON1) != 0);
-            buttons[(int)MouseButtonsEnum.XButton2] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_XBUTTON2) != 0);
+            buttons[(int)MouseButtonsType.Left] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_LBUTTON) != 0);
+            buttons[(int)MouseButtonsType.Right] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_RBUTTON) != 0);
+            buttons[(int)MouseButtonsType.Middle] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_MBUTTON) != 0);
+            buttons[(int)MouseButtonsType.XButton1] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_XBUTTON1) != 0);
+            buttons[(int)MouseButtonsType.XButton2] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_XBUTTON2) != 0);
 
-            DoubleClickDetection(gameTime);
+            DoubleClickDetection(time);
         }
 
-        private void DoubleClickDetection(GameTime gameTime)
+        /// <summary>
+        /// Detekuje dvoj-klik.
+        /// </summary>
+        /// <param name="time">Herní čas.</param>
+        private void DoubleClickDetection(GameTime time)
         {
             doubleClickedButton = null;
 
             if (lastClickedButton != null)
             {
-                elapsedSinceClick += gameTime.ElapsedGameTime;
+                elapsedSinceClick += time.ElapsedGameTime;
 
                 if (elapsedSinceClick > DoubleClickRate ||
                     elapsedSinceClick > TimeSpan.FromSeconds(5))
@@ -192,14 +188,12 @@ namespace Glib.Input
                 }
             }
 
-            MouseButtonsEnum? clickedButton = null;
+            MouseButtonsType? clickedButton = null;
 
-            for (int i = 0; i < ButtonCount; i++)
+            for (int i = 0; i < BUTTON_COUNT; i++)
             {
-                if (IsButtonPressed((MouseButtonsEnum)i))
-                {
-                    clickedButton = (MouseButtonsEnum)i;
-                }
+                if (IsButtonPressed((MouseButtonsType)i))
+                    clickedButton = (MouseButtonsType)i;
             }
 
             if (clickedButton != null)
@@ -222,46 +216,46 @@ namespace Glib.Input
         }
 
         /// <summary>
-        /// Aktualizuje, jestli je kursor vne nebo vevnitr okna.
+        /// Aktualizuje pozici myši, zda se nachází v okně nebo ne.
         /// </summary>
-        /// <param name="point"></param>
-        private void UpdateIsWithinDisplayArea(Win32Point point)
+        /// <param name="point">Pozice myši.</param>
+        private void UpdateIsWithinDisplayArea(POINT point)
         {
-            IsWithinDisplayArea = point.X >= 0 && point.Y >= 0 && point.X <= window.Window.ClientBounds.Width && point.Y <= window.Window.ClientBounds.Height;
+            IsWithinDisplayArea = (point.X >= 0 && point.Y >= 0 && point.X <= window.Window.ClientBounds.Width && point.Y <= window.Window.ClientBounds.Height);
         }
 
         /// <summary>
-        /// Returns true if the given mouse button is currently down.
+        /// Pokud se stisklo tlačítko myši.
         /// </summary>
-        /// <param name="button"></param>
-        /// <returns></returns>
-        public bool IsButtonDown(MouseButtonsEnum button)
+        /// <param name="button">Jaké tlačítko se má zjistit.</param>
+        /// <returns>Vrací true, pokud je stisknuto.</returns>
+        public bool IsButtonDown(MouseButtonsType button)
         {
             return buttons[(int)button];
         }
 
         /// <summary>
-        /// Returns true if the given mouse button is currently down and was not on the last update. Method is same as IsButtonClicked().
+        /// Pokud se stisklo tlačítko, ale při poslední aktualizaci ještě nebylo stisknuto.
         /// </summary>
-        /// <param name="button"></param>
-        /// <returns></returns>
-        public bool IsButtonPressed(MouseButtonsEnum button)
+        /// <param name="button">Jaké tlačítko se má zjistit.</param>
+        /// <returns>Vrací true, pokud je stisknuto.</returns>
+        public bool IsButtonPressed(MouseButtonsType button)
         {
-            return buttons[(int)button] && !oldButtons[(int)button];
+            return (buttons[(int)button] && !oldButtons[(int)button]);
         }
 
         /// <summary>
-        /// Returns true if the given mouse button is clicked and was clicked twice within the time span specified by DoubleClickRate.
+        /// Pokud byl dvoj-klik na tlačítku.
         /// </summary>
-        /// <param name="button"></param>
-        /// <returns></returns>
-        public bool IsButtonDoubleClicked(MouseButtonsEnum button)
+        /// <param name="button">Jaké tlačítko se má zjistit.</param>
+        /// <returns>Vrací true, pokud byl dvoj-klik.</returns>
+        public bool IsButtonDoubleClicked(MouseButtonsType button)
         {
-            return doubleClickedButton != null && doubleClickedButton.Value == button;
+            return (doubleClickedButton != null && doubleClickedButton.Value == button);
         }
 
         /// <summary>
-        /// Resets double click tracking for the mouse.
+        /// Resetuje dvoj-klik myši.
         /// </summary>
         public void ResetDoubleClick()
         {
@@ -271,21 +265,21 @@ namespace Glib.Input
         }
 
         /// <summary>
-        /// Returns true if the given mouse button is currently up.
+        /// Pokud tlačítko je uvolněno.
         /// </summary>
-        /// <param name="button"></param>
-        /// <returns></returns>
-        public bool IsButtonUp(MouseButtonsEnum button)
+        /// <param name="button">Jaké tlačítko se má zjistit.</param>
+        /// <returns>Vrací true, pokud je uvolněno.</returns>
+        public bool IsButtonUp(MouseButtonsType button)
         {
             return !buttons[(int)button];
         }
 
         /// <summary>
-        /// Returns true if the given mouse button is currently up and was not up on the last update.
+        /// Pokud tlačítko je bylo uvolněni o v předchozí aktualizaci.
         /// </summary>
-        /// <param name="button"></param>
-        /// <returns></returns>
-        public bool IsButtonReleased(MouseButtonsEnum button)
+        /// <param name="button">Jaké tlačítko se má zjistit.</param>
+        /// <returns>Vrací true, pokud tlačítko nebylo stisknuto.</returns>
+        public bool IsButtonReleased(MouseButtonsType button)
         {
             return !buttons[(int)button] && oldButtons[(int)button];
         }
@@ -293,22 +287,23 @@ namespace Glib.Input
         /// <summary>
         /// Prekryje metodu ToString.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Vrací výstup myši.</returns>
         public override string ToString()
         {
-            string downButtons = "";
+            string downButtons = null;
 
-            for (int i = 0; i < ButtonCount; i++)
+            for (int i = 0; i < BUTTON_COUNT; i++)
             {
-                if (IsButtonDown((MouseButtonsEnum)i))
-                {
-                    downButtons += " " + ((MouseButtonsEnum)i).ToString();
-                }
+                if (IsButtonDown((MouseButtonsType)i))
+                    downButtons += " " + ((MouseButtonsType)i).ToString();
             }
 
-            return String.Format("[{0}, {1}]\nIsIn: {2} DownButtons:{3}", position.X, position.Y, IsWithinDisplayArea, downButtons);
+            if (downButtons == null)
+                downButtons = "None";
+
+            return String.Format("[{0}, {1}] IsIn: {2} DownButtons:{3}", position.X, position.Y, IsWithinDisplayArea, downButtons);
         }
 
-        #endregion
+        #endregion Funkce
     }
 }

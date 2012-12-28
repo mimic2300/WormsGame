@@ -2,6 +2,7 @@
 using SharpDX.DirectInput;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Graphics;
+using SharpDX.Windows;
 using System;
 using System.Diagnostics;
 
@@ -18,8 +19,7 @@ namespace Glib
         /// <summary>
         /// Aktualizace okna.
         /// </summary>
-        public delegate void OnUpdateDelegate(GameTime gameTime);
-        public event OnUpdateDelegate OnUpdate;
+        public event Action<GameTime> OnUpdate;
 
         private readonly Stopwatch fpsClock;
         private GraphicsDeviceManager gdm;
@@ -30,11 +30,9 @@ namespace Glib
         private Mouse mouse;
 
         /// <summary>
-        /// 
+        /// Hlavní konstruktor.
         /// </summary>
-        /// <param name="contentDirectory"></param>
-        /// <param name="vsync"></param>
-        public GlibWindow(string contentDirectory = "Content", bool vsync = false)
+        public GlibWindow()
         {
             gdm = new GraphicsDeviceManager(this);
             fpsClock = new Stopwatch();
@@ -42,12 +40,20 @@ namespace Glib
             keyboard = new Keyboard(this);
             mouse = new Mouse(this);
 
-            // nastavuje vertikální synchronizaci
-            gdm.SynchronizeWithVerticalRetrace = vsync;
-            IsFixedTimeStep = vsync;
+            IsFixedTimeStep = false;
+            gdm.SynchronizeWithVerticalRetrace = false;
 
-            // nastavuje adresář pro herní obsah
-            Content.RootDirectory = contentDirectory;
+            Content.RootDirectory = "Content";
+
+            VirtualConstructor(gdm);
+        }
+
+        /// <summary>
+        /// Formulář okna.
+        /// </summary>
+        public RenderForm Form
+        {
+            get { return (RenderForm)Window.NativeWindow; }
         }
 
         /// <summary>
@@ -83,6 +89,22 @@ namespace Glib
         }
 
         /// <summary>
+        /// Šířka okna.
+        /// </summary>
+        public int Width
+        {
+            get { return Window.ClientBounds.Width; }
+        }
+
+        /// <summary>
+        /// Výška okna.
+        /// </summary>
+        public int Height
+        {
+            get { return Window.ClientBounds.Height; }
+        }
+
+        /// <summary>
         /// Načte herní obsah.
         /// </summary>
         protected override void LoadContent()
@@ -108,6 +130,7 @@ namespace Glib
         protected override void Initialize()
         {
             Window.Title = "Glib Window";
+            Form.Icon = null;
 
             base.Initialize();
         }
@@ -130,12 +153,12 @@ namespace Glib
         /// <summary>
         /// Aktualizace okna před vykreslením.
         /// </summary>
-        /// <param name="gameTime">Herní čas.</param>
-        protected override void Update(GameTime gameTime)
+        /// <param name="time">Herní čas.</param>
+        protected override void Update(GameTime time)
         {
-            base.Update(gameTime);
+            base.Update(time);
 
-            OnUpdate(gameTime);
+            OnUpdate(time);
 
             if (keyboard.State.IsPressed(Key.Escape))
                 Exit();
@@ -157,6 +180,14 @@ namespace Glib
                 fpsCount = 0;
                 fpsClock.Restart();
             }
+        }
+
+        /// <summary>
+        /// Virtuální konstruktor.
+        /// </summary>
+        /// <param name="gdm">Manažer grafického ovladače.</param>
+        protected virtual void VirtualConstructor(GraphicsDeviceManager gdm)
+        {
         }
     }
 }

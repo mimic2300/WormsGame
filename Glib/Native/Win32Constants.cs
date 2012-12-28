@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Glib.Win32
+﻿namespace Glib.Win32
 {
     /// <summary>
     /// Contains constants relating to Win32.

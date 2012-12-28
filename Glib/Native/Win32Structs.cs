@@ -1,6 +1,5 @@
 ﻿﻿using System;
 using System.Runtime.InteropServices;
-using System.Security;
 
 namespace Glib.Win32
 {
@@ -8,7 +7,7 @@ namespace Glib.Win32
     /// Struct for native Win32 messages.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct Win32Message
+    internal struct MSG
     {
         public IntPtr hWnd;
         public int msg;
@@ -19,7 +18,7 @@ namespace Glib.Win32
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct Win32Point
+    internal struct POINT
     {
         public int X;
         public int Y;
