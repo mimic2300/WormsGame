@@ -88,19 +88,18 @@ namespace Glib
         {
             Update(time);
 
-            HandleFPS(time);
+            CalculateFps(time);
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             base.Draw(time);
         }
 
-
         /// <summary>
-        /// Pocita FPS.
+        /// Počítá FPS.
         /// </summary>
-        /// <param name="time">Herni cas.</param>
-        private void HandleFPS(GameTime time)
+        /// <param name="time">Herni čas.</param>
+        private void CalculateFps(GameTime time)
         {
             float totalSeconds = (float)time.TotalGameTime.TotalSeconds;
 
@@ -112,15 +111,6 @@ namespace Glib
                 fpsCount = 0;
                 fpsClock.Restart();
             }
-        }
-
-
-        /// <summary>
-        /// Aktualizace před vykreslením.
-        /// </summary>
-        /// <param name="time">Herní čas.</param>
-        protected virtual void Update(GameTime time)
-        {
         }
     }
 }

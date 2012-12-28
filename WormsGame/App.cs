@@ -2,7 +2,7 @@
 
 namespace WormsGame
 {
-    class Program
+    internal class App
     {
 #if NETFX_CORE
         [MTAThread]
