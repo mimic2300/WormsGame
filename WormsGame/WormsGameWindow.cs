@@ -13,13 +13,17 @@ namespace WormsGame
         private TextFormat mFont = null;
         private float mAngle = 0;
 
-        protected override void Initialize(ref WindowParams window)
+        protected override void WindowConfiguration(ref WindowConfig window)
         {
             window.Title = "Worms";
             window.VSync = false;
-            ApplyChanges();
 
-            base.Initialize(ref window);
+            base.WindowConfiguration(ref window);
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
 
             mFont = new TextFormat(FactoryWrite, "Consolas", 20f);
 
@@ -59,7 +63,7 @@ namespace WormsGame
             Draw2D.Text(mMouseWheel, mFont, 80, 90, Color.LightGreen);
             Draw2D.Text(mAngle.ToString("F1") + "°", mFont, 80, 110, Color.LightGreen);
 
-            Draw2D.Text("Hello World", mFont, 10, Height - 30, Color.Yellow);
+            Draw2D.Text("ěščřžýáíé - ďťňó - 0123456789 - hello world - !?&@~+-._,%#*><()[]{}", mFont, 10, Height - 30, Color.Yellow);
             Draw2D.Text("d(-_-)b", mFont, 600, 300, Color.Red, DrawTextOptions.None, MeasuringMode.Natural, mAngle, new Vector2(635, 315));
 
             Draw2D.Rectangle(300, 300, 100, 100, Color.DeepSkyBlue, 1, mAngle);

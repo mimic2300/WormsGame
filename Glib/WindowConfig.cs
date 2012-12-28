@@ -7,7 +7,7 @@ namespace Glib
     /// <summary>
     /// Parametry herního okna.
     /// </summary>
-    public struct WindowParams
+    public struct WindowConfig
     {
         #region Proměnné
 
@@ -44,7 +44,7 @@ namespace Glib
         /// Kopírovací konstruktor.
         /// </summary>
         /// <param name="window">Parametry herního okna.</param>
-        public WindowParams(WindowParams window)
+        public WindowConfig(WindowConfig window)
         {
             this = window;
         }
@@ -53,7 +53,7 @@ namespace Glib
         /// Konstruktor, který získá parametry z herního okna.
         /// </summary>
         /// <param name="form"></param>
-        public WindowParams(RenderForm form)
+        public WindowConfig(RenderForm form)
         {
             mHandle = form.Handle;
 

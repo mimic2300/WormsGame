@@ -57,7 +57,7 @@
     <Compile Include="GameWindow2D.cs" />
     <Compile Include="GameWindowDx9.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WindowParams.cs" />
+    <Compile Include="WindowConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

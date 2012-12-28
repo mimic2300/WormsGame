@@ -15,7 +15,7 @@ namespace Glib
         private GameTime mGameTime = null;
         private RenderForm mRenderForm = null;
         // základní parametry herního okna, které lze měnit
-        private WindowParams mWindowParams;
+        private WindowConfig mWindowParams;
         private double mDeltaTime = 0;
         private int mFps = 0;
         // pouze počítadlo pro FPS
@@ -49,7 +49,7 @@ namespace Glib
             mRenderForm.MouseMove += new MouseEventHandler((o, e) => { MouseMove(e); });
             mRenderForm.MouseWheel += new MouseEventHandler((o, e) => { MouseWheel(e); });
 
-            mWindowParams = new WindowParams(mRenderForm);
+            mWindowParams = new WindowConfig(mRenderForm);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Glib
         /// <summary>
         /// Parametry herního okna.
         /// </summary>
-        public WindowParams WindowParams
+        public WindowConfig WindowParams
         {
             get { return mWindowParams; }
         }
@@ -165,7 +165,7 @@ namespace Glib
         /// <summary>
         /// Aplikuje změny, které se provedly v parametrech okna při initializaci.
         /// </summary>
-        protected void ApplyChanges()
+        private void ApplyChanges()
         {
             mRenderForm.Text = mWindowParams.Title;
             mRenderForm.Icon = mWindowParams.Icon;
@@ -181,7 +181,8 @@ namespace Glib
         /// </summary>
         public void Run()
         {
-            Initialize(ref mWindowParams); // abstract
+            WindowConfiguration(ref mWindowParams); // virtual
+            Initialize(); // abstract
 
             bool isResizing = false;
             bool isClosing = false;
@@ -229,11 +230,19 @@ namespace Glib
         }
 
         /// <summary>
-        /// Provede initializaci před spuštěním herního okna.
+        /// Přenastaví parametry herního okna.
         /// </summary>
         /// <param name="window">Parametry herního okna, které se již aplikovali.</param>
-        /// <remarks>Je nutné poté zavolat funkci <c>ApplyChanges</c> a tím uložit změny.</remarks>
-        protected abstract void Initialize(ref WindowParams window);
+        /// <remarks>Bázová funkce se volá až nakonec.</remarks>
+        protected virtual void WindowConfiguration(ref WindowConfig window)
+        {
+            ApplyChanges();
+        }
+
+        /// <summary>
+        /// Provede initializaci před spuštěním herního okna.
+        /// </summary>
+        protected abstract void Initialize();
 
         /// <summary>
         /// Vykresluje vše na okno.

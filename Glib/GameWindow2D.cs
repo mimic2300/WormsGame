@@ -35,9 +35,7 @@ namespace Glib
         /// <summary>
         /// Provede initializaci před spuštěním herního okna.
         /// </summary>
-        /// <param name="window">Parametry herního okna, které se již aplikovali.</param>
-        /// <remarks>Je nutné poté zavolat funkci <c>ApplyChanges</c> a tím uložit změny.</remarks>
-        protected override void Initialize(ref WindowParams window)
+        protected override void Initialize()
         {
             mFactory = new Factory();
             mFactoryWrite = new FactoryWrite();
