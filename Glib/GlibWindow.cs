@@ -18,7 +18,8 @@ namespace Glib
         /// <summary>
         /// Aktualizace okna.
         /// </summary>
-        public event Action OnUpdate;
+        public delegate void OnUpdateDelegate(GameTime gameTime);
+        public event OnUpdateDelegate OnUpdate;
 
         private readonly Stopwatch fpsClock;
         private GraphicsDeviceManager gdm;
@@ -134,7 +135,7 @@ namespace Glib
         {
             base.Update(gameTime);
 
-            OnUpdate();
+            OnUpdate(gameTime);
 
             if (keyboard.State.IsPressed(Key.Escape))
                 Exit();

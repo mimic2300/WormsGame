@@ -11,7 +11,7 @@ namespace Glib.Input
     /// </summary>
     public class Mouse
     {
-        const int ButtonCount = 5;
+        const int ButtonCount = 6;
 
         GlibWindow window;
 
@@ -140,7 +140,7 @@ namespace Glib.Input
         /// <summary>
         /// Updates the state of the mouse.
         /// </summary>
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             Win32Point point;
             Win32Methods.GetCursorPos(out point);
@@ -170,20 +170,20 @@ namespace Glib.Input
             //this.buttons[(int)MouseButtons.XButton1] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_XBUTTON1) != 0);
             //this.buttons[(int)MouseButtons.XButton2] = (Win32Methods.GetAsyncKeyState(Win32Constants.VK_XBUTTON2) != 0);
 
-            //// Double click detection.
+            // Double click detection.
 
-            ////this.doubleClickedButton = null;
+            //this.doubleClickedButton = null;
 
-            ////if (this.lastClickedButton != null)
-            ////{
-            ////    this.elapsedSinceClick += gameTime.ElapsedGameTime;
+            //if (this.lastClickedButton != null)
+            //{
+            //    this.elapsedSinceClick += gameTime.ElapsedGameTime;
 
-            ////    if (this.elapsedSinceClick > this.DoubleClickRate ||
-            ////        this.elapsedSinceClick > TimeSpan.FromSeconds(5)) // Give up updating after 5 seconds
-            ////    {
-            ////        this.lastClickedButton = null;
-            ////    }
-            ////}
+            //    if (this.elapsedSinceClick > this.DoubleClickRate ||
+            //        this.elapsedSinceClick > TimeSpan.FromSeconds(5)) // Give up updating after 5 seconds
+            //    {
+            //        this.lastClickedButton = null;
+            //    }
+            //}
 
             //MouseButtons? clickedButton = null;
 

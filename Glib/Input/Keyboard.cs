@@ -1,5 +1,5 @@
 ﻿using SharpDX.DirectInput;
-
+using SharpDX.Toolkit;
 using KeyboardDirect = SharpDX.DirectInput.Keyboard;
 
 namespace Glib.Input
@@ -37,7 +37,7 @@ namespace Glib.Input
         /// <summary>
         /// Volá se stejně jako aktualizace okna.
         /// </summary>
-        protected override void Update()
+        protected override void Update(GameTime gameTime)
         {
             keyboard.GetCurrentState(ref state);
         }

@@ -1,4 +1,5 @@
 ﻿using SharpDX.DirectInput;
+using SharpDX.Toolkit;
 
 namespace Glib.Input
 {
@@ -31,6 +32,6 @@ namespace Glib.Input
         /// <summary>
         /// Volá se stejně jako aktualizace okna.
         /// </summary>
-        protected abstract void Update();
+        protected abstract void Update(GameTime gameTime);
     }
 }
