@@ -1,7 +1,12 @@
 ﻿using SharpDX;
+using SharpDX.DirectInput;
 using SharpDX.Toolkit;
 using SharpDX.Toolkit.Graphics;
+using System;
 using System.Diagnostics;
+
+using Keyboard = Glib.Input.Keyboard;
+using Mouse = Glib.Input.Mouse;
 
 namespace Glib
 {
@@ -10,11 +15,18 @@ namespace Glib
     /// </summary>
     public abstract class GlibWindow : Game
     {
+        /// <summary>
+        /// Aktualizace okna.
+        /// </summary>
+        public event Action OnUpdate;
+
         private readonly Stopwatch fpsClock;
         private GraphicsDeviceManager gdm;
         private SpriteBatch sprite;
         private int fpsCount = 0;
         private float fps = 0;
+        private Keyboard keyboard;
+        private Mouse mouse;
 
         /// <summary>
         /// 
@@ -25,6 +37,9 @@ namespace Glib
         {
             gdm = new GraphicsDeviceManager(this);
             fpsClock = new Stopwatch();
+
+            keyboard = new Keyboard(this);
+            mouse = new Mouse(this);
 
             // nastavuje vertikální synchronizaci
             gdm.SynchronizeWithVerticalRetrace = vsync;
@@ -51,12 +66,28 @@ namespace Glib
         }
 
         /// <summary>
+        /// Informace o klávesnici.
+        /// </summary>
+        public Keyboard Keyboard
+        {
+            get { return keyboard; }
+        }
+
+        /// <summary>
+        /// Informace o myši.
+        /// </summary>
+        public Mouse Mouse
+        {
+            get { return mouse; }
+        }
+
+        /// <summary>
         /// Načte herní obsah.
         /// </summary>
         protected override void LoadContent()
         {
             sprite = new SpriteBatch(gdm.GraphicsDevice);
-            
+
             base.LoadContent();
         }
 
@@ -66,7 +97,7 @@ namespace Glib
         protected override void BeginRun()
         {
             fpsClock.Start();
-            
+
             base.BeginRun();
         }
 
@@ -93,6 +124,20 @@ namespace Glib
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             base.Draw(time);
+        }
+
+        /// <summary>
+        /// Aktualizace okna před vykreslením.
+        /// </summary>
+        /// <param name="gameTime">Herní čas.</param>
+        protected override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            OnUpdate();
+
+            if (keyboard.State.IsPressed(Key.Escape))
+                Exit();
         }
 
         /// <summary>

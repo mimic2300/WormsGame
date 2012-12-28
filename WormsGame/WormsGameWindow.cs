@@ -47,6 +47,8 @@ namespace WormsGame
             Sprite.Begin(SpriteSortMode.Deferred, GraphicsDevice.BlendStates.NonPremultiplied);
 
             Sprite.DrawString(font, "FPS: " + FPS.ToString("#"), new Vector2(10, 10), Color.Black);
+            Sprite.DrawString(font, "Keyboard: " + Keyboard, new Vector2(10, 40), Color.Black);
+            Sprite.DrawString(font, "Mouse: " + Mouse, new Vector2(10, 70), Color.Black);
 
             effect.VertexColorEnabled = true;
             effect.CurrentTechnique.Passes[0].Apply();
