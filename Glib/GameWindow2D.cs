@@ -78,5 +78,11 @@ namespace Glib
             base.DrawEnd();
             mRenderTarget.EndDraw();
         }
+
+        protected override void ResizeEnd(DrawingSize size)
+        {
+            base.ResizeEnd(size);
+            mRenderTarget.Resize(size);
+        }
     }
 }

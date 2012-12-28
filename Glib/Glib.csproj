@@ -41,6 +41,9 @@
     <Reference Include="SharpDX.Direct3D9">
       <HintPath>..\packages\SharpDX.Direct3D9.2.4.2\lib\net40\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX.DirectInput">
+      <HintPath>..\packages\SharpDX.DirectInput.2.4.2\lib\net40\SharpDX.DirectInput.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX.DXGI">
       <HintPath>..\packages\SharpDX.DXGI.2.4.2\lib\net40\SharpDX.DXGI.dll</HintPath>
     </Reference>

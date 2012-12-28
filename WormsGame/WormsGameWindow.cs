@@ -49,6 +49,8 @@ namespace WormsGame
             Draw2D.Line(mMousePosition.X, 0, mMousePosition.X, Height, Color.Gray);
             Draw2D.Line(0, mMousePosition.Y, Width, mMousePosition.Y, Color.Gray);
 
+            System.Console.WriteLine("Width: " + Width + ", Height: " + Height);
+
             Draw2D.Text("FPS: ", mFont, 10, 10, Color.White);
             Draw2D.Text("Delta time: ", mFont, 10, 30, Color.White);
             Draw2D.Text("Mouse position: ", mFont, 10, 50, Color.White);

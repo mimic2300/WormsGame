@@ -3,6 +3,8 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
+using DrawingSize = SharpDX.DrawingSize;
+
 namespace Glib
 {
     /// <summary>
@@ -188,7 +190,13 @@ namespace Glib
             bool isClosing = false;
 
             mRenderForm.ResizeBegin += new EventHandler((o, e) => { isResizing = true; });
-            mRenderForm.ResizeEnd += new EventHandler((o, e) => { isResizing = false; });
+            mRenderForm.ResizeEnd += new EventHandler((o, e) =>
+            {
+                isResizing = false;
+                mWindowParams.Width = mRenderForm.Width;
+                mWindowParams.Height = mRenderForm.Height;
+                ResizeEnd(new DrawingSize(mRenderForm.Width, mRenderForm.Height)); // virtual
+            });
             mRenderForm.FormClosing += new FormClosingEventHandler((o, e) => { isClosing = true; });
 
             LoadContent(); // virtual
@@ -263,6 +271,14 @@ namespace Glib
         /// Konec vykreslení.
         /// </summary>
         protected virtual void DrawEnd()
+        {
+        }
+
+        /// <summary>
+        /// Změna velikosti herního okna.
+        /// </summary>
+        /// <param name="size">Nová velikost okna.</param>
+        protected virtual void ResizeEnd(DrawingSize size)
         {
         }
 
