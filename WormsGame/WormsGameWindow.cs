@@ -30,7 +30,7 @@ namespace WormsGame
 
             Sprite.Begin(SpriteSortMode.Deferred, GraphicsDevice.BlendStates.NonPremultiplied);
 
-            Sprite.DrawString(font, "FPS: " + FPS, new Vector2(10, 10), Color.Black);
+            Sprite.DrawString(font, "FPS: " + FPS.ToString("#"), new Vector2(10, 10), Color.Black);
 
             Sprite.End();
         }

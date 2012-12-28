@@ -88,11 +88,21 @@ namespace Glib
         {
             Update(time);
 
+            HandleFPS(time);
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            float totalSeconds = (float)time.TotalGameTime.TotalSeconds;
-
             base.Draw(time);
+        }
+
+
+        /// <summary>
+        /// Pocita FPS.
+        /// </summary>
+        /// <param name="time">Herni cas.</param>
+        private void HandleFPS(GameTime time)
+        {
+            float totalSeconds = (float)time.TotalGameTime.TotalSeconds;
 
             fpsCount++;
 
@@ -103,6 +113,7 @@ namespace Glib
                 fpsClock.Restart();
             }
         }
+
 
         /// <summary>
         /// Aktualizace před vykreslením.
